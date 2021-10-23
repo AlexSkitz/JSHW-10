@@ -1,14 +1,14 @@
 
 document.onload = () => {
-    const isActiveTrafficLight
+    const isActiveTrafficLight = true ;
     const delay = ms => new Promise(ok => setTimeout(() => ok(ms), ms))
 
     const redLight = document.getElementById('red');
     const yellowLight = document.getElementById('yellow');
     const greenLight = document.getElementById('green');
 
-    const redLight = document.getElementById('pedestrian-red');
-    const greenLight = document.getElementById('pedestrian-green');
+    const pedestrianRedLight = document.getElementById('pedestrian-red');
+    const pedestrianGreenLight = document.getElementById('pedestrian-green');
     const lightsObj = {
         activeTime: 0,
         element: null
@@ -16,7 +16,7 @@ document.onload = () => {
 
     const lightObjects = {
         red: {
-            activeTime: 15000,
+            activeTime: 5000,
             element: greenLight
         },
         yellow: {
@@ -24,7 +24,7 @@ document.onload = () => {
             element: yellowLight
         },
         green: {
-            activeTime: 30000,
+            activeTime: 10000,
             element: redLight
         },
     }
@@ -32,19 +32,18 @@ document.onload = () => {
     const pedestrianObjects = {
         red: {
             activeTime: 10000,
-            element: pedestrianGreenLight
+            element: pedestrianRedLight
         },
         green: {
             activeTime: 5000,
-            element: pedestrianRedLight
+            element: pedestrianGreenLight
         },
     }
 
     async function activateTrafficLight(lightObjects, lightColor) {
         const light = lightObjects[lightColor]
         showLight(light);
-        await delay(light.activeTime);
-        turnOffLight(light);
+       
     }
     async function trafficLight(lightObjects) {
         turnOffLight(lightObject['green']);
@@ -66,12 +65,12 @@ document.onload = () => {
        
     }
     
-    function showLight(lightObject); {
-        const light = lightObject.element;
+    function showLight(lightObjects) {
+        const light = lightObjects.element;
         light.classList.add('active');
     }
-    function turnOffLight(lightObject) {
-        const light = lightObject.element;
+    function turnOffLight(lightObjects) {
+        const light = lightObjects.element;
         light.classList.remove('active');
     }
 

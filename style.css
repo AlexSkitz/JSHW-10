@@ -9,7 +9,6 @@ body{
 .traffic-light{
     width: 200px;
     height: 600px;
-    border: 1px solid black;
 }
 
 .light{
@@ -20,13 +19,13 @@ body{
     height: 200px;
     border: 1px solid black;
 }
-.light#red.active .circle .light#pedestrian-red.active .circle {
+.light#red.active .circle, .light#pedestrian-red.active .circle {
     background-color: red;
 }
 .light#yellow.active .circle {
     background-color: yellow;
 }
-.light#green.active .circle .light#pedestrian-green.active .circle{
+.light#green.active .circle, .light#pedestrian-green.active .circle{
     background-color: green;
 }
 .circle{
