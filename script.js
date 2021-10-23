@@ -9,12 +9,10 @@ document.onload = () => {
 
     const redLight = document.getElementById('pedestrian-red');
     const greenLight = document.getElementById('pedestrian-green');
-//correct
     const lightsObj = {
         activeTime: 0,
         element: null
     }
-//correct
 
     const lightObjects = {
         red: {
@@ -30,7 +28,6 @@ document.onload = () => {
             element: redLight
         },
     }
-//correct
 
     const pedestrianObjects = {
         red: {
@@ -42,14 +39,13 @@ document.onload = () => {
             element: pedestrianRedLight
         },
     }
-//
+
     async function activateTrafficLight(lightObjects, lightColor) {
         const light = lightObjects[lightColor]
         showLight(light);
         await delay(light.activeTime);
         turnOffLight(light);
     }
-//corect++
     async function trafficLight(lightObjects) {
         turnOffLight(lightObject['green']);
         activateTrafficLight(lightObjects, 'yellow');
@@ -59,7 +55,6 @@ document.onload = () => {
         await delay(lightObjects['red'].activeTime);
         turnOffLight(lightObjects['red']);
     }
-//corect++
     async function pedestrianTrafficLight() {
         const greenLight = pedestrianObjects['green'];
         const redLight = pedestrianObjects['red'];
@@ -70,30 +65,26 @@ document.onload = () => {
             turnOffLight(greenLight);
        
     }
-//corect++
     
     function showLight(lightObject); {
         const light = lightObject.element;
         light.classList.add('active');
     }
-//corect++
     function turnOffLight(lightObject) {
         const light = lightObject.element;
         light.classList.remove('active');
     }
-//correct
+
     function initialState(){
         showLight(lightObjects['green']);
         showLight(pedestrianObjects['red']);
     }
-//correct
     async function controlLight() {
         initialState();
         await domEventPromise(pedestrianButton, 'click');
         trafficLight(lightObjects, true);
         await pedestrianTrafficLight();
     }
-//correct
     function domEventPromise(element, eventName) {
         const resolver = (event) => {
             resolver(event);
@@ -111,10 +102,8 @@ document.onload = () => {
         // element.removeEventListener(eventName, resolver);
         //  return event;
     }
-//correct
 
     const pedestrianButton = document.getElementById('pedestrian-button');
-//correct
 
     async function startTrafficLight(){
         while(true){
