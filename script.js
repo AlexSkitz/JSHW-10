@@ -1,5 +1,5 @@
 
-document.addEventListener("DOMContentLoaded" , async () => {
+document.addEventListener("DOMContentLoaded", async () => {
     const isActiveTrafficLight = true;
 
     const delay = ms => new Promise(ok => setTimeout(() => ok(ms), ms));
@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded" , async () => {
 
     const pedestrianRedLight = document.getElementById('pedestrian-red');
     const pedestrianGreenLight = document.getElementById('pedestrian-green');
-    const pedestrianButton = document.getElementById('pedestrian-button');
 
     const lightsObj = {
         activeTime: 0,
@@ -36,7 +35,7 @@ document.addEventListener("DOMContentLoaded" , async () => {
             element: pedestrianRedLight
         },
         green: {
-            activeTime: 5000,
+            activeTime: 3000,
             element: pedestrianGreenLight
         },
     };
@@ -44,7 +43,7 @@ document.addEventListener("DOMContentLoaded" , async () => {
         const light = lightObjects[lightColor];
 
         showLight(light);
-       
+
     }
     async function trafficLight(lightObjects) {
         turnOffLight(lightObjects['green']);
@@ -54,6 +53,7 @@ document.addEventListener("DOMContentLoaded" , async () => {
         activateTrafficLight(lightObjects, 'red');
         await delay(lightObjects['red'].activeTime);
         turnOffLight(lightObjects['red']);
+
     }
     async function pedestrianTrafficLight() {
         const greenLight = pedestrianObjects['green'];
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded" , async () => {
         showLight(greenLight);
         await delay(greenLight.activeTime);
         turnOffLight(greenLight);
-       
+
     }
     function showLight(lightObject) {
         const light = lightObject.element;
@@ -87,14 +87,15 @@ document.addEventListener("DOMContentLoaded" , async () => {
         const resolver = (resolve, event) => {
             resolve(event);
         };
-        const event = await new Promise ((resolve) => {
+        const event = await new Promise((resolve) => {
             element.addEventListener(eventName, (event) => resolver(resolve, event));
         });
         element.removeEventListener(eventName, resolver);
         return event;
     }
-    async function startTrafficLight(){
-        while(true){
+    const pedestrianButton = document.getElementById('pedestrian-button');
+    async function startTrafficLight() {
+        while (true) {
             await controlLight();
 
         }
@@ -102,5 +103,36 @@ document.addEventListener("DOMContentLoaded" , async () => {
     startTrafficLight();
 });
 
+//
+//
 
+async function speedTest(getPromise, count, parallel = 1) {
+    console.log(getPromise().then((res) => console.log(res)));
+    console.log(parallel);
 
+    const promiseArr = [];
+    const startTime = performance.now();
+
+    for (let i = 0; i < count; i++) {
+        for (let k = 0; k < parallel; k++) {
+            promiseArr.push(getPromise());
+        }
+    }
+    const countTime = performance.now();
+    const final = Promise.all(promiseArr);
+    await final;
+
+    let promiseTime = performance.now();
+
+    return {
+        duration: (countTime - startTime),
+        querySpeed: 1000 / (countTime - startTime) / (count * parallel),
+        queryDuration: 1000 / (countTime - startTime) / (count * parallel),
+        parallelSpeed: 1000 / (promiseTime - startTime) / (count * parallel),
+        parallelDuration: (promiseTime - startTime) / (count * parallel),
+    }
+}
+
+ 
+speedTest(() => delay(1000), 10, 10).then(result => console.log(result));
+speedTest(() => fetch('http://swapi.dev/api/people/1').then(res => res.json()), 10, 5).then(res => console.log(res));
