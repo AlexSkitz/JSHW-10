@@ -10,12 +10,12 @@ document.addEventListener("DOMContentLoaded" , async () => {
 
     const pedestrianRedLight = document.getElementById('pedestrian-red');
     const pedestrianGreenLight = document.getElementById('pedestrian-green');
+    const pedestrianButton = document.getElementById('pedestrian-button');
 
     const lightsObj = {
         activeTime: 0,
         element: null
     };
-
     const lightObjects = {
         red: {
             activeTime: 5000,
@@ -30,7 +30,6 @@ document.addEventListener("DOMContentLoaded" , async () => {
             element: redLight
         },
     };
-
     const pedestrianObjects = {
         red: {
             activeTime: 10000,
@@ -41,17 +40,17 @@ document.addEventListener("DOMContentLoaded" , async () => {
             element: pedestrianGreenLight
         },
     };
-
     async function activateTrafficLight(lightObjects, lightColor) {
-        const light = lightObjects[lightColor]
+        const light = lightObjects[lightColor];
+
         showLight(light);
        
     }
     async function trafficLight(lightObjects) {
-        turnOffLight(lightObject['green']);
+        turnOffLight(lightObjects['green']);
         activateTrafficLight(lightObjects, 'yellow');
         await delay(lightObjects['yellow'].activeTime);
-        turnOffLight(lightObjects, 'red');
+        turnOffLight(lightObjects['yellow']);
         activateTrafficLight(lightObjects, 'red');
         await delay(lightObjects['red'].activeTime);
         turnOffLight(lightObjects['red']);
@@ -60,52 +59,40 @@ document.addEventListener("DOMContentLoaded" , async () => {
         const greenLight = pedestrianObjects['green'];
         const redLight = pedestrianObjects['red'];
 
-            turnOffLight(redLight);
-            showLight(greenLight);
-            await delay(greenLight.activeTime);
-            turnOffLight(greenLight);
+        turnOffLight(redLight);
+        showLight(greenLight);
+        await delay(greenLight.activeTime);
+        turnOffLight(greenLight);
        
     }
-    
-    function showLight(lightObjects) {
-        const light = lightObjects.element;
+    function showLight(lightObject) {
+        const light = lightObject.element;
         light.classList.add('active');
     }
-    function turnOffLight(lightObjects) {
-        const light = lightObjects.element;
+    function turnOffLight(lightObject) {
+        const light = lightObject.element;
         light.classList.remove('active');
     }
-
-    function initialState(){
+    function initialState() {
         showLight(lightObjects['green']);
         showLight(pedestrianObjects['red']);
     }
     async function controlLight() {
         initialState();
         await domEventPromise(pedestrianButton, 'click');
-        trafficLight(lightObjects, true);
+        trafficLight(lightObjects);
         await pedestrianTrafficLight();
     }
-    function domEventPromise(element, eventName) {
-        const resolver = (event) => {
-            resolver(event);
+    async function domEventPromise(element, eventName) {
+        const resolver = (resolve, event) => {
+            resolve(event);
         };
-
-        return new Promise((resolve) => {
+        const event = await new Promise ((resolve) => {
             element.addEventListener(eventName, (event) => resolver(resolve, event));
-        }).then(() => {
-            element.removeEventListener(eventName, resolver);
         });
-
-        // const event = await new Promise ((resolve) => {
-        //      element.addEventListener(eventName, (event) => resolver(resolve< event));
-        //  });
-        // element.removeEventListener(eventName, resolver);
-        //  return event;
+        element.removeEventListener(eventName, resolver);
+        return event;
     }
-
-    const pedestrianButton = document.getElementById('pedestrian-button');
-
     async function startTrafficLight(){
         while(true){
             await controlLight();
