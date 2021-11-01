@@ -1,7 +1,8 @@
 
-document.onload = () => {
-    const isActiveTrafficLight = true ;
-    const delay = ms => new Promise(ok => setTimeout(() => ok(ms), ms))
+document.addEventListener("DOMContentLoaded" , async () => {
+    const isActiveTrafficLight = true;
+
+    const delay = ms => new Promise(ok => setTimeout(() => ok(ms), ms));
 
     const redLight = document.getElementById('red');
     const yellowLight = document.getElementById('yellow');
@@ -9,10 +10,11 @@ document.onload = () => {
 
     const pedestrianRedLight = document.getElementById('pedestrian-red');
     const pedestrianGreenLight = document.getElementById('pedestrian-green');
+
     const lightsObj = {
         activeTime: 0,
         element: null
-    }
+    };
 
     const lightObjects = {
         red: {
@@ -27,7 +29,7 @@ document.onload = () => {
             activeTime: 10000,
             element: redLight
         },
-    }
+    };
 
     const pedestrianObjects = {
         red: {
@@ -38,7 +40,7 @@ document.onload = () => {
             activeTime: 5000,
             element: pedestrianGreenLight
         },
-    }
+    };
 
     async function activateTrafficLight(lightObjects, lightColor) {
         const light = lightObjects[lightColor]
@@ -111,7 +113,7 @@ document.onload = () => {
         }
     }
     startTrafficLight();
-};
+});
 
 
 
